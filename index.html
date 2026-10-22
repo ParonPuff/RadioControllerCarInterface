@@ -1,0 +1,115 @@
+<!Doctype html>
+<html>
+	<head><link rel="stylesheet" type="text/css" href="style.css"></head>
+	<body>
+		<input type="range" min="0" max="4" step="1" value="0"><div class="value">0</div>
+	<script>
+	document.addEventListener("keydown", keyDownTextField, false); // en event listner kollar när du trycker på knappar/tangenter
+	document.addEventListener("keyup", keyUpTextField, false);
+	// här har vi alla våra variablar
+	const Http = new XMLHttpRequest();
+	var right = false;
+	var left = false;
+	var up = false;
+	var down = false;
+	var urlV = 0;
+	var valuestring = 0;
+	var isanykeydown=false;
+	var ipV = 'https://www.google.com/';
+
+	// här regestrerar vi knapptryck
+	function keyDownTextField(e) {
+	  if (isanykeydown) // här kollar vi om knappen redan är nedtryckt 
+	    return;
+	  isanykeydown=true;
+		var keyCode = e.keyCode;
+		//här kollar vi om de knapparna vi bryr oss om är nedtryckta 
+		if(keyCode==68) {
+			right = true; 
+			yuhYuh(); // här hänvisar vi koden till en annan funktion
+		} 
+		else if(keyCode==83){
+			down = true;
+			yuhYuh();
+		} 
+		if(keyCode==87) {
+			up = true;
+			yuhYuh();
+		} 
+		else if(keyCode==65){
+			left = true;
+			yuhYuh();
+		}
+		if(keyCode==38) {
+			valuestring = valuestring + 1;
+			maxValuestring();
+			}
+		if(keyCode==40){
+			valuestring = valuestring - 1;
+			minValuestring()
+			}
+	}
+	//här registrerar vi när du släppt knappen
+	function keyUpTextField(e) {
+		isanykeydown=false;
+		var keyCode = e.keyCode;
+		
+		if(keyCode==68) {
+			right = false;
+		} 
+		else if(keyCode==83){
+			down = false;
+		} 
+		if(keyCode==87) {
+			up = false;
+		} 
+		else if(keyCode==65){
+			left = false;
+		}	
+	}
+	function maxValuestring(){
+		if(valuestring > 4)
+		valuestring = 4
+	}
+	function minValuestring(){
+		if(valuestring < 0)
+		valuestring = 0
+	}
+	function yuhYuh(){
+		// här bestämmer vi vad koden kommer fråga webserven efter när en av tangenterna är nedtryckta 
+		if (up){
+		urlV = ipV + "/search?q=forward";
+		}
+		if (right){
+		urlV = ipV + "/search?q=right";
+		}
+		if (down){
+		urlV = ipV + "/search?q=down";
+		}
+		if (left){
+		urlV = ipV + "/search?q=left";
+		}
+		httpGetAsync();
+	}
+
+	// här säger vi till webservern vad vi vill att den gör
+	function httpGetAsync(){
+		Http.open("GET", urlV);
+		Http.send();
+		Http.onreadystatechange=(e)=>{
+		console.log(Http.responseText)
+		}
+	}
+	//lånad kod
+	var elem = document.querySelector('input[type="range"]');
+
+	var rangeValue = function(){
+    var newValue = elem.value;
+    var target = document.querySelector('.value');
+    target.innerHTML = newValue;
+    }
+
+    elem.addEventListener("input", rangeValue);
+	</script>
+	</body>
+</html>
